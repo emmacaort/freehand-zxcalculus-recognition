@@ -28,14 +28,9 @@ def matchPaths(path1,path2,threshold=10.0):
 
     Returns:
         A list. The first element is the two paths. The second element is 
-        the matchtype. 
-        For example:
-
+        the matchtype. For example:
         [instance.path]
-
-        If a key from the keys argument is missing from the dictionary,
-        then that row was not found in the table.
-
+        
     """
     matchtype = []
     d0 = sp.dist(path1.end1,path2.end1)
@@ -59,8 +54,8 @@ def iterMatch(pathlist):
     Returns:
         A list of all the matches. Each match includes two paths and thier
         match type. For example:
-
         [[element.path instance,element.path instance],[0]]
+        
     """
     matchlist = []
     valid_matchtype = [[0],[1],[2],[3],[0,3],[1,2]]
@@ -73,8 +68,19 @@ def iterMatch(pathlist):
     return matchlist
 
 def refineMatch(matchlist):
-    """
-    Refine the matchlist, find matches with three or more paths
+    """ Retrieve matches with three paths in existing match list.
+    
+    For each pairing paths in the matchlist, check whether there are 
+    matches like [path1,path2], [path2,path3] and [path1,path3]. If yes,
+    add the new match [path1,path2,path3] to the matchlist.
+
+    Args:
+        matchlist: The existing match list.
+
+    Returns:
+        A new match list including matches with three paths. The new appended
+        matches contain three paths and a blank match type:
+        [[path1,path2,path3],[]]
     """
     newmatchlist = matchlist[:]
     for match in matchlist:
@@ -103,44 +109,44 @@ def refineMatch(matchlist):
     return newmatchlist
 
 def connect2Paths(match):
-  """
-  Return a new pointlist if two paths should be connected
-  Return a blank pointlist if two paths should be separate
-  """
-  [path1,path2] = match[0]
-  if match[1]==[0]:
-    revpath1 = copy.deepcopy(path1.pointlist[::-1])
-    temppointlist = copy.deepcopy(revpath1)
-    temppointlist.extend(path2.pointlist)
-    temppointlist = sp.transtoInkscapePath(temppointlist)
-    return elm.path(temppointlist)
-  elif match[1]==[1]:
-    temppointlist = copy.deepcopy(path2.pointlist)
-    temppointlist.extend(path1.pointlist)
-    temppointlist = sp.transtoInkscapePath(temppointlist)
-    return elm.path(temppointlist)
-  elif match[1]==[2]:
-    temppointlist = copy.deepcopy(path1.pointlist)
-    temppointlist.extend(path2.pointlist)
-    temppointlist = sp.transtoInkscapePath(temppointlist)
-    return elm.path(temppointlist)
-  elif match[1]==[3]:
-    revpath2 = copy.deepcopy(path2.pointlist[::-1])
-    temppointlist = copy.deepcopy(path1.pointlist)
-    temppointlist.extend(revpath2)
-    temppointlist = sp.transtoInkscapePath(temppointlist)
-    return elm.path(temppointlist)
-  elif match[1]==[0,3]:
-    revpath2 = copy.deepcopy(path2.pointlist[::-1])
-    temppointlist = copy.deepcopy(path1.pointlist)
-    temppointlist.extend(revpath2)
-    temppointlist = sp.transtoInkscapePath(temppointlist)
-    return elm.path(temppointlist)
-  else: # match[2]==[1,2]
-    temppointlist = copy.deepcopy(path1.pointlist)
-    temppointlist.extend(path2.pointlist)
-    temppointlist = sp.transtoInkscapePath(temppointlist)
-    return elm.path(temppointlist)
+    """
+    Return a new pointlist if two paths should be connected
+    Return a blank pointlist if two paths should be separate
+    """
+    [path1,path2] = match[0]
+    if match[1]==[0]:
+        revpath1 = copy.deepcopy(path1.pointlist[::-1])
+        temppointlist = copy.deepcopy(revpath1)
+        temppointlist.extend(path2.pointlist)
+        temppointlist = sp.transtoInkscapePath(temppointlist)
+        return elm.path(temppointlist)
+    elif match[1]==[1]:
+        temppointlist = copy.deepcopy(path2.pointlist)
+        temppointlist.extend(path1.pointlist)
+        temppointlist = sp.transtoInkscapePath(temppointlist)
+        return elm.path(temppointlist)
+    elif match[1]==[2]:
+        temppointlist = copy.deepcopy(path1.pointlist)
+        temppointlist.extend(path2.pointlist)
+        temppointlist = sp.transtoInkscapePath(temppointlist)
+        return elm.path(temppointlist)
+    elif match[1]==[3]:
+        revpath2 = copy.deepcopy(path2.pointlist[::-1])
+        temppointlist = copy.deepcopy(path1.pointlist)
+        temppointlist.extend(revpath2)
+        temppointlist = sp.transtoInkscapePath(temppointlist)
+        return elm.path(temppointlist)
+    elif match[1]==[0,3]:
+        revpath2 = copy.deepcopy(path2.pointlist[::-1])
+        temppointlist = copy.deepcopy(path1.pointlist)
+        temppointlist.extend(revpath2)
+        temppointlist = sp.transtoInkscapePath(temppointlist)
+        return elm.path(temppointlist)
+    else: # match[1]==[1,2]
+        temppointlist = copy.deepcopy(path1.pointlist)
+        temppointlist.extend(path2.pointlist)
+        temppointlist = sp.transtoInkscapePath(temppointlist)
+        return elm.path(temppointlist)
 
 def connect3Paths(match):
     print '=====connect 3 paths====='
