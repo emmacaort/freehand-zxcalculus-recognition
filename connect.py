@@ -58,8 +58,7 @@ def giveScore(nodelist,wirelist,intersect):
         elif len(wire.connection)==1:
             score *= 1.05
         else:
-            score *= 1.2    
-    print 'score:',score
+            score *= 1.2
     return score
 
 

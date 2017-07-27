@@ -12,28 +12,35 @@ import connect as cn
 
 
 def main():
+    print 'Training the node classifier...'
     filenames = ['circle0.svg','morphism0.svg']
     labels = [0,1]
     nodeclf = clf.trainSVM(filenames,labels,200,200)
     svg = sp.loadFile('zx2.svg')
     pathlist = sp.loadPaths(svg)
+    
+    print 'Generating hypotheses...'
     hypotheses = sgm.segmentPath(pathlist,train=False)
-    normal = clf.predict(hypotheses,nodeclf)
     [corr_pathlist,intersect] = sgm.correctPathlist(pathlist)
+    
+    print 'Classifying diagram elements in each hypothesis...'
+    normal = clf.predict(hypotheses,nodeclf)
     if corr_pathlist!=None:
         correction = clf.predict(corr_pathlist,nodeclf)
     else:
         correction = None
+        
+    print 'Scoring the hypotheses and finding the winner...'
     [wirelist,dotlist,morphismlist] = cn.findWinner(normal,correction,intersect)
+    
     print '=====WINNER====='
+    print 'Hypotheses number:',len(hypotheses)
     print('wire:',len(wirelist))
     print('dot:',len(dotlist))
     print('morphism:',len(morphismlist))
     tree = sp.loadFile('blank.svg')
     cn.drawOutput(tree,wirelist,dotlist,morphismlist)    
-    print 'len of hypotheses:',len(hypotheses)
+    
     sp.writeFile(tree,'c1.svg')
     
-    for wire in wirelist:
-        print len(wire.pointlist)
 main()
