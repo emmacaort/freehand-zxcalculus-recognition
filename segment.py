@@ -139,7 +139,7 @@ def connect2Paths(match):
         temppointlist.extend(revpath2)
         temppointlist = sp.transtoInkscapePath(temppointlist)
         return elm.path(temppointlist)
-    else: # match[2]==[1,2]
+    else: # match[1]==[1,2]
         temppointlist = copy.deepcopy(path1.pointlist)
         temppointlist.extend(path2.pointlist)
         temppointlist = sp.transtoInkscapePath(temppointlist)

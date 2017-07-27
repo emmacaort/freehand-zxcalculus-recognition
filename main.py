@@ -14,7 +14,7 @@ import connect as cn
 def main():
     filenames = ['circle0.svg','morphism0.svg']
     labels = [0,1]
-    nodeclf = clf.trainSVM(filenames,labels,500,500)
+    nodeclf = clf.trainSVM(filenames,labels,200,200)
     svg = sp.loadFile('zx2.svg')
     pathlist = sp.loadPaths(svg)
     hypotheses = sgm.segmentPath(pathlist,train=False)

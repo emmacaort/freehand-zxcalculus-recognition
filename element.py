@@ -210,7 +210,7 @@ class shape:
         compact = 2 * math.sqrt(self.area * math.pi) / self.perim
         eccent = self.eccentricity()
         rectang = self.rectangularity()
-        circular = self.circularity
+        circular = self.circularity()
         self.attributes = [compact, eccent, rectang, circular]
 
     def eccentricity(self):

@@ -135,11 +135,11 @@ def predict(hypotheses, clf):
                 else:
                     orient = shape.orientation()
                     morphismlist.append(elm.morphism(shape.centroid, shape.poly, shape.pointlist, orient))
-    classifications.append([wirelist, dotlist, morphismlist])
-    print '==============='
-    print('wire:', len(wirelist))
-    print('dot:', len(dotlist))
-    print('morphism:', len(morphismlist))
+        classifications.append([wirelist, dotlist, morphismlist])
+        print '==============='
+        print('wire:', len(wirelist))
+        print('dot:', len(dotlist))
+        print('morphism:', len(morphismlist))
     return classifications
 
 
