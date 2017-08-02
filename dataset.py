@@ -152,7 +152,6 @@ def trapezoidpoint(c,a,b,h,edge):
         # the right edge
         y = random.uniform(-1,1)*h/2
         x = (2*b-a)/h * y + b
-        #x = (a-b)/h * y + b/2
     elif edge == 2:
         # the bottom edge
         x = random.uniform(-a/2,b-a/2)
