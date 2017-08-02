@@ -110,7 +110,7 @@ def circlepointlist(pointnum,c,r,deformratio):
     return pointlist
 
 
-def generateDotPath(pointnrange=[51,120],c=[200,200],rrange=[80,120],deformratio=0.03):
+def generateDotPath(pointnrange=[80,120],c=[200,200],rrange=[60,80],deformratio=0.03):
     """Generate a path object which has a freehand dot shape.
 
     The generated path has a random point dense and a random circle size.
@@ -147,15 +147,16 @@ def trapezoidpoint(c,a,b,h,edge):
     if edge == 0:
         # the top edge
         x = random.uniform(-1,1)*(a/2)
-        y = h/2
+        y = -h/2
     elif edge == 1:
         # the right edge
         y = random.uniform(-1,1)*h/2
-        x = (a-b)/h * y + b/2
+        x = (2*b-a)/h * y + b
+        #x = (a-b)/h * y + b/2
     elif edge == 2:
         # the bottom edge
         x = random.uniform(-a/2,b-a/2)
-        y = -h/2
+        y = h/2
     else:
         # edge==3, the left edge
         x = -a/2
@@ -188,7 +189,7 @@ def trapezoidpointlist(pointnum,c,a,b,h,deformratio):
     edges[0].sort(key=lambda x:x[0])
     edges[1].sort(key=lambda x:x[0])
     edges[2].sort(key=lambda x:x[0],reverse=True)
-    edges[3].sort(key=lambda x:x[1])
+    edges[3].sort(key=lambda x:x[1],reverse=True)
     pointlist = edges[0]+edges[1]+edges[2]+edges[3]
     pointlist.append(pointlist[0])
     r = math.sqrt((a**2)/4+(b**2)/4)  # The radius is the distance from centre to top-left corner.
@@ -203,7 +204,7 @@ def trapezoidpointlist(pointnum,c,a,b,h,deformratio):
     return pointlist
 
 
-def generateMorphismPath(pointnrange=[75,120],c=[200,200],arange=[60,100],brange=[80,150],hrange=[40,80],deformratio=0.03):
+def generateMorphismPath(pointnrange=[80,120],c=[200,200],arange=[40,70],brange=[50,90],hrange=[30,80],deformratio=0.025):
     """Generate a path object which has a freehand morphism shape.
 
     The generated path has a random point dense and a random trapezoid size.
@@ -232,7 +233,7 @@ def simple_test(nodetype,output_name):
         nodetype (str): 'dot' or 'morphism'.
         output_name (str): The file name of the output image.
     """
-    tree = sp.loadFile('blank.svg')
+    tree = sp.loadFile('datablank.svg')
     if nodetype=='dot':
         path0 = generateDotPath()
     elif nodetype=='morphism':
