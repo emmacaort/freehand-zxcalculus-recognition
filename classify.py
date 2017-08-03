@@ -57,7 +57,7 @@ def generateData(nodetype, num):
         for shape in shapelist:
             shape.getAttributes()
             data.append(shape.attributes)
-        newy = [0] * len(data)  # 0 corresponds to dot nodes.
+        newy = [1] * len(data)  # 0 corresponds to dot nodes.
         y.extend(newy)
     elif nodetype == 'morphism':
         morphismpathlist = [ds.generateMorphismPath() for _ in xrange(num)]
@@ -65,7 +65,7 @@ def generateData(nodetype, num):
         for shape in shapelist:
             shape.getAttributes()
             data.append(shape.attributes)
-        newy = [1] * len(data)  # 1 corresponds to morphism nodes.
+        newy = [-1] * len(data)  # 1 corresponds to morphism nodes.
         y.extend(newy)
     else:
         pass
@@ -130,7 +130,7 @@ def predict(hypotheses, clf):
                 shape.getAttributes()
                 pred = clf.predict([shape.attributes])
                 #confidence = clf.predict_proba([shape.attributes])
-                if pred == [0]:
+                if pred == [1]:
                     dotlist.append(elm.dot(shape.centroid, shape.poly, shape.pointlist))
                 else:
                     orient = shape.orientation()

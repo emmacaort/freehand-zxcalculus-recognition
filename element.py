@@ -211,7 +211,9 @@ class shape:
         eccent = self.eccentricity()
         rectang = self.rectangularity()
         circular = self.circularity()
-        self.attributes = [compact, eccent, rectang, circular]
+        aspect = self.aspectRatio()
+        #self.attributes = [eccent,circular]
+        self.attributes = [eccent,circular,aspect]
 
     def eccentricity(self):
         """Calculate the eccentricity of the polygon.
@@ -256,7 +258,8 @@ class shape:
         r = max(ecldndist)
         circlearea = math.pi * r ** 2
         return self.area / circlearea
-
+    def aspectRatio(self):
+        return (self.xbound[1] - self.xbound[0])/(self.ybound[1] - self.ybound[0])
     def openCheck(self, threshold=0.10):
         """Check whether the polygon is a closed shape.
 
