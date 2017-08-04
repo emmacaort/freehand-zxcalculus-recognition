@@ -172,13 +172,36 @@ def addMorphism(tree,morphism,a=30,b=40,h=20):
         h (float): Length of the left edge.
     """
     centre = morphism.centre
-    orient = morphism.orient    
+    orient = morphism.orient
     root = tree.getroot()
-    corner_str = str(centre[0]+a/2) + ',' + str(centre[1]-h/2)
+    
     for pathaddr in root.iter('{http://www.w3.org/2000/svg}g'):
         stroke = ET.SubElement(pathaddr,'{http://www.w3.org/2000/svg}path')  
         stroke.attrib['style'] = "fill:none;stroke:#000000;stroke-width:0.26458332px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-        stroke.attrib['d'] =  'M ' + corner_str + ' h -' + str(a) + ' v ' + str(h) + ' h ' + str(b) + ' z'
+        if orient == 0:
+            corner_str = str(centre[0]+a/2) + ',' + str(centre[1]-h/2)
+            stroke.attrib['d'] =  'M ' + corner_str + ' h -' + str(a) + ' v ' + str(h) + ' h ' + str(b) + ' z'
+        elif orient == 1:
+            corner_str = str(centre[0]-h/2) + ',' + str(centre[1]+a/2)
+            stroke.attrib['d'] =  'M ' + corner_str + ' v -' + str(a) + ' h ' + str(h) + ' v ' + str(b) + ' z'     
+        elif orient == 2:
+            corner_str = str(centre[0]+h/2) + ',' + str(centre[1]+a/2)
+            stroke.attrib['d'] =  'M ' + corner_str + ' v -' + str(a) + ' h -' + str(h) + ' v ' + str(b) + ' z'  
+        elif orient == 3:
+            corner_str = str(centre[0]-a/2) + ',' + str(centre[1]-h/2)
+            stroke.attrib['d'] =  'M ' + corner_str + ' h ' + str(a) + ' v ' + str(h) + ' h -' + str(b) + ' z'  
+        elif orient == 4:
+            corner_str = str(centre[0]-a/2) + ',' + str(centre[1]+h/2)
+            stroke.attrib['d'] =  'M ' + corner_str + ' h ' + str(a) + ' v -' + str(h) + ' h -' + str(b) + ' z'  
+        elif orient == 5:
+            corner_str = str(centre[0]+h/2) + ',' + str(centre[1]-a/2)
+            stroke.attrib['d'] =  'M ' + corner_str + ' v ' + str(a) + ' h -' + str(h) + ' v -' + str(b) + ' z'  
+        elif orient == 6:
+            corner_str = str(centre[0]-h/2) + ',' + str(centre[1]-a/2)
+            stroke.attrib['d'] =  'M ' + corner_str + ' v ' + str(a) + ' h ' + str(h) + ' v -' + str(b) + ' z'  
+        elif orient == 7:
+            corner_str = str(centre[0]+a/2) + ',' + str(centre[1]+h/2)
+            stroke.attrib['d'] =  'M ' + corner_str + ' h -' + str(a) + ' v -' + str(h) + ' h ' + str(b) + ' z'         
         stroke.attrib['id'] = 'path'+str('1')
         stroke.attrib['inkscape:connector-curvature'] = '0'
         stroke.tail = '\n' 
@@ -196,7 +219,7 @@ def addWire(tree,wire,dot_r=10,mor_h=20):
         dot_r (float): The radius of the dots.
         mor_h (float): The height of the morphisms.
     """
-    points = wire.refinePoints()
+    points = wire.refinePoints(3)
     if len(wire.connection)!=0:
         for [node,angle,i] in wire.connection:
             if node.getType()=='dot':
@@ -215,8 +238,7 @@ def addWire(tree,wire,dot_r=10,mor_h=20):
                 else:  # west-east orient    
                   d_x = x/abs(x)*h
                   d_y = d_x*y/x
-                  d = np.array(d_x,d_y)
-                  points[-i] = np.array(node.centre)-d
+                  points[-i] = [node.centre[0]-d_x,node.centre[1]-d_y]
     root = tree.getroot()
     start_str = 'm '+str(points[0][0])+','+str(points[0][1])
     curve_str = ' C'  # The capital C means absolute positions.
