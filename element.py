@@ -313,25 +313,13 @@ class shape:
         cornerpoint = self.boundpoints[np.argmax(distances)]
         [dx, dy] = np.array(self.centroid) - np.array(cornerpoint)
         if dx < 0 and dy < 0:
-            if dx < dy:
-                return 0
-            else:
-                return 1
+            return 'origin'
         elif dx >= 0 and dy < 0:
-            if dx < -dy:
-                return 2
-            else:
-                return 3
+            return 'hflip'
         elif dx > 0 and dy > 0:
-            if dx > dy:
-                return 4
-            else:
-                return 5
+            return 'hvflip'
         else:
-            if dx > -dy:
-                return 6
-            else:
-                return 7
+            return 'vflip'
 
 
 class dot():
@@ -372,6 +360,9 @@ class dot():
     def giveId(self,i):
         self.node_id = i
         self.func_name = ""
+        
+    def getOrientStr(self):
+        return ""
        
         
 class morphism():
@@ -396,9 +387,9 @@ class morphism():
         self.centre = centre
         self.poly = poly
         self.pointlist = pointlist
-        self.orient = orient
         self.connections = []
         self.colour = ""
+        self.orient = orient
 
     def getType(self):
         """Return the name of the node type. """
@@ -414,6 +405,12 @@ class morphism():
     def giveId(self,i):
         self.node_id = i
         self.func_name = "$f%d$" % (i)
+        
+    def getOrientStr(self):
+        if self.orient == "origin":
+            return ""
+        else:
+            return ","+self.orient
         
 class wire():
     """The class of wires.

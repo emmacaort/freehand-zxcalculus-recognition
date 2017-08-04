@@ -111,7 +111,7 @@ def addStroke(tree,newpath):
         stroke.attrib['id'] = 'path'+str('1')
         stroke.attrib['inkscape:connector-curvature'] = '0'
         stroke.tail = '\n' 
- 
+
 def addPoint(tree,point,pointtype='c'):
     """Draw a point on the XML tree. A function for testing. 
     
@@ -178,35 +178,23 @@ def addMorphism(tree,morphism,a=30,b=40,h=20):
     for pathaddr in root.iter('{http://www.w3.org/2000/svg}g'):
         stroke = ET.SubElement(pathaddr,'{http://www.w3.org/2000/svg}path')  
         stroke.attrib['style'] = "fill:none;stroke:#000000;stroke-width:0.26458332px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-        if orient == 0:
+        if orient == "origin":
             corner_str = str(centre[0]+a/2) + ',' + str(centre[1]-h/2)
-            stroke.attrib['d'] =  'M ' + corner_str + ' h -' + str(a) + ' v ' + str(h) + ' h ' + str(b) + ' z'
-        elif orient == 1:
-            corner_str = str(centre[0]-h/2) + ',' + str(centre[1]+a/2)
-            stroke.attrib['d'] =  'M ' + corner_str + ' v -' + str(a) + ' h ' + str(h) + ' v ' + str(b) + ' z'     
-        elif orient == 2:
-            corner_str = str(centre[0]+h/2) + ',' + str(centre[1]+a/2)
-            stroke.attrib['d'] =  'M ' + corner_str + ' v -' + str(a) + ' h -' + str(h) + ' v ' + str(b) + ' z'  
-        elif orient == 3:
+            stroke.attrib['d'] =  'M ' + corner_str + ' h -' + str(a) + ' v ' + str(h) + ' h ' + str(b) + ' z' 
+        elif orient == "hflip":
             corner_str = str(centre[0]-a/2) + ',' + str(centre[1]-h/2)
             stroke.attrib['d'] =  'M ' + corner_str + ' h ' + str(a) + ' v ' + str(h) + ' h -' + str(b) + ' z'  
-        elif orient == 4:
+        elif orient == "hvflip":
             corner_str = str(centre[0]-a/2) + ',' + str(centre[1]+h/2)
-            stroke.attrib['d'] =  'M ' + corner_str + ' h ' + str(a) + ' v -' + str(h) + ' h -' + str(b) + ' z'  
-        elif orient == 5:
-            corner_str = str(centre[0]+h/2) + ',' + str(centre[1]-a/2)
-            stroke.attrib['d'] =  'M ' + corner_str + ' v ' + str(a) + ' h -' + str(h) + ' v -' + str(b) + ' z'  
-        elif orient == 6:
-            corner_str = str(centre[0]-h/2) + ',' + str(centre[1]-a/2)
-            stroke.attrib['d'] =  'M ' + corner_str + ' v ' + str(a) + ' h ' + str(h) + ' v -' + str(b) + ' z'  
-        elif orient == 7:
+            stroke.attrib['d'] =  'M ' + corner_str + ' h ' + str(a) + ' v -' + str(h) + ' h -' + str(b) + ' z'   
+        elif orient == "vflip":
             corner_str = str(centre[0]+a/2) + ',' + str(centre[1]+h/2)
             stroke.attrib['d'] =  'M ' + corner_str + ' h -' + str(a) + ' v -' + str(h) + ' h ' + str(b) + ' z'         
         stroke.attrib['id'] = 'path'+str('1')
         stroke.attrib['inkscape:connector-curvature'] = '0'
         stroke.tail = '\n' 
 
-  
+        
 def addWire(tree,wire,dot_r=10,mor_h=20):
     """Draw a wire on the XML tree.
     
@@ -231,19 +219,14 @@ def addWire(tree,wire,dot_r=10,mor_h=20):
             else:  # nodetype = morphism
                 h = mor_h/2
                 [x,y] = angle
-                if node.orient in [0,3,4,7]: # north-south orient     
-                  d_y = y/abs(y)*h  # Use the equation of similar triangles.
-                  d_x = d_y*x/y
-                  points[-i] = [node.centre[0]-d_x,node.centre[1]-d_y]
-                else:  # west-east orient    
-                  d_x = x/abs(x)*h
-                  d_y = d_x*y/x
-                  points[-i] = [node.centre[0]-d_x,node.centre[1]-d_y]
+                d_y = y/abs(y)*h  # Use the equation of similar triangles.
+                d_x = d_y*x/y
+                points[-i] = [node.centre[0]-d_x,node.centre[1]-d_y]
     root = tree.getroot()
     start_str = 'm '+str(points[0][0])+','+str(points[0][1])
     curve_str = ' C'  # The capital C means absolute positions.
     for point in points[1:]:
-      curve_str = curve_str + ' ' +str(point[0])+','+str(point[1])
+        curve_str = curve_str + ' ' +str(point[0])+','+str(point[1])
     path_str = start_str + curve_str
     for pathaddr in root.iter('{http://www.w3.org/2000/svg}g'):
         stroke = ET.SubElement(pathaddr,'{http://www.w3.org/2000/svg}path')  
