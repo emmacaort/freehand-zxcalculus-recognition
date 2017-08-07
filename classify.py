@@ -99,7 +99,7 @@ def trainSVM(filenames, labels, dotnum, morphismnum):
         y.extend(doty)
         data.extend(mordata)
         y.extend(mory)
-        clf = svm.SVC(probability=True)
+        clf = svm.LinearSVC()
         clf.fit(data, y)
     return clf
 

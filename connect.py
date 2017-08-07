@@ -17,7 +17,9 @@ def connectWire(wirelist,nodelist):
 
     """
     for wire in wirelist:
-        wire.connect(nodelist)
+        for [connectnode,angle,i,_] in wire.connect(nodelist):
+            connectnode.addConnection([wire, angle, i])
+            
 
 
 def giveScore(nodelist,wirelist,intersect):
@@ -46,16 +48,16 @@ def giveScore(nodelist,wirelist,intersect):
         pass
     # If there is a node or a wire connecting to nothing, the hypothesis will have a lower score.
     for node in nodelist:
-        if node.connection==0:
+        if len(node.connections)==0:
             score *= 0.8
-        elif node.connection==1:
+        elif len(node.connections)==1:
             score *= 1.05
         else:
             score *= 1.2
     for wire in wirelist:
-        if len(wire.connection)==0:
+        if len(wire.connections)==0:
             score *= 0.8
-        elif len(wire.connection)==1:
+        elif len(wire.connections)==1:
             score *= 1.05
         else:
             score *= 1.2

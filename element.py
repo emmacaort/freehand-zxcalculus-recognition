@@ -313,25 +313,13 @@ class shape:
         cornerpoint = self.boundpoints[np.argmax(distances)]
         [dx, dy] = np.array(self.centroid) - np.array(cornerpoint)
         if dx < 0 and dy < 0:
-            if dx < dy:
-                return 0
-            else:
-                return 1
+            return 'origin'
         elif dx >= 0 and dy < 0:
-            if dx < -dy:
-                return 2
-            else:
-                return 3
+            return 'hflip'
         elif dx > 0 and dy > 0:
-            if dx > dy:
-                return 4
-            else:
-                return 5
+            return 'hvflip'
         else:
-            if dx > -dy:
-                return 6
-            else:
-                return 7
+            return 'vflip'
 
 
 class dot():
@@ -354,17 +342,29 @@ class dot():
         self.centre = centre
         self.poly = poly
         self.pointlist = pointlist
-        self.connection = 0
+        self.connections = []
+        self.relative_pos = [0,0]
+        self.colour = ""
 
     def getType(self):
         """Return the name of the node type. """
         return 'dot'
 
-    def addConnection(self):
+    def addConnection(self,connection):
         """Increase the number of connection by 1 once called."""
-        self.connection += 1
+        self.connections.append(connection)
 
-
+    def getRelativePos(self,pos):
+        self.relative_pos = pos
+       
+    def giveId(self,i):
+        self.node_id = i
+        self.func_name = ""
+        
+    def getOrientStr(self):
+        return ""
+       
+        
 class morphism():
     """The class of morphism nodes.
 
@@ -387,18 +387,31 @@ class morphism():
         self.centre = centre
         self.poly = poly
         self.pointlist = pointlist
+        self.connections = []
+        self.colour = ""
         self.orient = orient
-        self.connection = 0
 
     def getType(self):
         """Return the name of the node type. """
-        return 'morhpsim'
+        return 'morphism'
 
-    def addConnection(self):
+    def addConnection(self,connection):
         """Increase the number of connection by 1 once called."""
-        self.connection += 1
+        self.connections.append(connection)
+    
+    def getRelativePos(self,pos):
+        self.relative_pos = pos
 
-
+    def giveId(self,i):
+        self.node_id = i
+        self.func_name = "$f%d$" % (i)
+        
+    def getOrientStr(self):
+        if self.orient == "origin":
+            return ""
+        else:
+            return ","+self.orient
+        
 class wire():
     """The class of wires.
 
@@ -416,7 +429,8 @@ class wire():
     def __init__(self, ends, pointlist):
         self.ends = ends
         self.pointlist = pointlist
-        self.connection = []
+        self.connections = []
+        self.shifts = []
 
     def calculateAngle(self, end, centre):
         """Calculate the angle of the wire end and the node centre.
@@ -453,12 +467,12 @@ class wire():
                 mindist_idx = np.argmin(neighbours, axis=0)[1]  # The index of the min distance in the neighbours list.
                 connectnode = neighbours[mindist_idx][0]
                 angle = self.calculateAngle(end, connectnode.centre)
-                connectnode.addConnection()  # Increase the connection number for the connected node.
-                self.connection.append([connectnode, angle, i])
+                self.connections.append([connectnode, angle, i, 0])
+                yield [connectnode, angle, i, 0]
             except:
                 pass
 
-    def refinePoints(self, pnumber=6):
+    def refinePoints(self, pnumber=3):
         """Reduce the number of points in the pointlist.
 
         This function is used for drawing the outputs. It enables the SVG to draw smooth or straight wires.
@@ -478,3 +492,15 @@ class wire():
         else:  # If the original point number is smaller than pnumber, than use the original one.
             refinedpoints = self.pointlist
         return refinedpoints
+        
+    def getLength(self):
+        linestring = geo.LineString(self.pointlist)
+        return linestring.length
+        
+    def getRelativePos(self,pos):
+        self.relative_pos = pos
+    
+    def changeShift(self,i,shift):
+        for connection in self.connections:
+            if connection[2] == i:
+                connection[3] = shift

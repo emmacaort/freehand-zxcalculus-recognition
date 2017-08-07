@@ -194,12 +194,6 @@ def trapezoidpointlist(pointnum,c,a,b,h,deformratio):
     r = math.sqrt((a**2)/4+(b**2)/4)  # The radius is the distance from centre to top-left corner.
     pointlist = deform(pointlist,r,deformratio)
     pointlist = sp.transtoInkscapePath(pointlist)
-    # Make the trapezoid west-east. 
-    change_orient = bool(random.getrandbits(1))
-    if change_orient:
-        for i,point in enumerate(pointlist):
-            [x,y] = point
-            pointlist[i] = [y,x]
     return pointlist
 
 
