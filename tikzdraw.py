@@ -39,6 +39,7 @@ def organize_wires(morphismlist,wirelist,edge_len=5.0):
         edge_len (float): The length of the morphism edge in LaTeX.
     """    
     for morphism in morphismlist:
+        morphism.sortConnection()
         south,north = [],[]
         for connection in morphism.connections:
             angle = connection[1]
@@ -162,7 +163,7 @@ def preprocess(dotlist,morphismlist,nodelist,wirelist,ref_centre,unit_d):
         i += 1
         relative_pos = get_relative_pos(node.centre,ref_centre,unit_d)
         points.append(relative_pos)
-        node.getRelativePos(relative_pos)       
+        node.setRelativePos(relative_pos)       
 
 def pos_str(pos):
     """Transform the position into a string.
@@ -353,9 +354,9 @@ def create_diagram(dotlist,morphismlist,wirelist):
                 else:
                     p_out_angle = (previous_in_angle+180)%360  # The opposite direction of the in_angle of the previous point
                     previous_point = interpoints[i-1]                
-                sub = [-previous_point[0]+current_point[0],-previous_point[1]+current_point[1]]
+                sub = [current_point[0]-previous_point[0],current_point[1]-previous_point[1]]
                 p_in_angle = transform_angle(sub)
-                p_in_angle = transform_direction(p_in_angle)
+                p_in_angle = transform_direction(p_in_angle)  # The angle only have four directions
                 previous_in_angle = p_in_angle
                 point_str = " to [out=%d, in=%d] +%s" %(p_out_angle,p_in_angle,pos_str(point))
                 interpoints_str += point_str

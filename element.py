@@ -354,14 +354,30 @@ class dot():
         """Increase the number of connection by 1 once called."""
         self.connections.append(connection)
 
-    def getRelativePos(self,pos):
+    def setRelativePos(self,pos):
+        """Set the relative position as an attributs of the wire.
+        
+        Args:
+            pos (list): The relative position.
+        """
         self.relative_pos = pos
        
     def giveId(self,i):
+        """Give the node an id.
+        
+        Args:
+            i (int): The id of the node
+        
+        """
         self.node_id = i
         self.func_name = ""
         
     def getOrientStr(self):
+        """Get the string of the node's orientation.
+        
+        Returns:
+            A string of the orientation.
+        """
         return ""
        
         
@@ -398,15 +414,35 @@ class morphism():
     def addConnection(self,connection):
         """Increase the number of connection by 1 once called."""
         self.connections.append(connection)
-    
-    def getRelativePos(self,pos):
+        
+    def sortConnection(self):
+        """Sort the connections list according to the x value of the angle.
+        """
+        self.connections = sorted(self.connections, key=lambda connection: connection[1][0], reverse=True)
+
+    def setRelativePos(self,pos):
+        """Set the relative position as an attributs of the wire.
+        
+        Args:
+            pos (list): The relative position.
+        """        
         self.relative_pos = pos
 
     def giveId(self,i):
+        """Give the node an id and a function name.
+        
+        Args:
+            i (int): The id of the node
+        """
         self.node_id = i
         self.func_name = "$f%d$" % (i)
         
     def getOrientStr(self):
+        """Get the string of the node's orientation.
+        
+        Returns:
+            A string of the orientation.
+        """
         if self.orient == "origin":
             return ""
         else:
@@ -440,7 +476,7 @@ class wire():
         """
         return np.array(centre) - np.array(end)
 
-    def connect(self, nodelist, threshold=10.0):
+    def connect(self, nodelist, threshold=15.0):
         """ Connect the wire with nodes.
 
         For each end of the wire, check the distance between the end position and every node's vertex position.
@@ -494,13 +530,22 @@ class wire():
         return refinedpoints
         
     def getLength(self):
+        """Calculate the length of the wire.
+        
+        Returns:
+            The float value of the length.
+        
+        """
         linestring = geo.LineString(self.pointlist)
         return linestring.length
-        
-    def getRelativePos(self,pos):
-        self.relative_pos = pos
     
     def changeShift(self,i,shift):
+        """Modify the shift value in the connections attribute.
+        
+        Args:
+            i (int): The id of the end.
+            shift (float): The distance of shift.
+        """
         for connection in self.connections:
             if connection[2] == i:
                 connection[3] = shift
