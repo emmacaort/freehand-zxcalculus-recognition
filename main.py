@@ -14,10 +14,14 @@ import tikzdraw as td
 
 def main():
     print 'Training the node classifier...'
-    filenames = ['circle0.svg','circle1.svg','circle2.svg','circle3.svg','morphism0.svg','morphism1.svg','morphism2.svg']
-    labels = [1,1,1,1,-1,-1,-1]
-    nodeclf = clf.trainSVM(filenames,labels,1,1)
-    svg = sp.loadFile('zx1.svg')
+    train_folder = 'training_set'
+    train_files = ['circle0.svg','circle1.svg','circle2.svg','circle3.svg','morphism0.svg','morphism1.svg','morphism2.svg']
+    train_labels = [1,1,1,1,-1,-1,-1]
+    nodeclf = clf.trainSVM(train_folder,train_files,train_labels,1,1)
+    
+    test_folder = 'test_set'
+    test_file = 'zx1.svg'
+    svg = sp.loadFile(test_folder,test_file)
     pathlist = sp.loadPaths(svg)
     
     print 'Generating hypotheses...'
@@ -39,12 +43,15 @@ def main():
     print('wire:',len(wirelist))
     print('dot:',len(dotlist))
     print('morphism:',len(morphismlist))
-    tree = sp.loadFile('blank.svg')
+    tree = sp.loadFile(test_folder,'blank.svg')
     print 'Drawing Outputs...'
     cn.drawOutput(tree,wirelist,dotlist,morphismlist)
-    print 'LaTex Code:'
-    latex_command = td.create_diagram(dotlist,morphismlist,wirelist)
-    print latex_command
     sp.writeFile(tree,'c1.svg')
+    try:
+        print 'LaTex Code:'
+        latex_command = td.create_diagram(dotlist,morphismlist,wirelist)
+        print latex_command
+    except:
+        pass
     
 main()

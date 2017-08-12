@@ -10,10 +10,11 @@ import element as elm
 
 
 
-def loadFile(filename):  
+def loadFile(foldername,filename):  
     """"Load an SVG file. 
     
     Args:
+        foldername (str): The string of the folder.
         filename (str): The string of the file name.
     
     Returns:
@@ -28,7 +29,8 @@ def loadFile(filename):
     ET.register_namespace('svg',"http://www.w3.org/2000/svg")
     ET.register_namespace('sodipodi',"http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd")
     ET.register_namespace('inkscape',"http://www.inkscape.org/namespaces/inkscape")
-    tree = ET.parse(filename)
+    address = foldername + "/" + filename
+    tree = ET.parse(address)
     return tree
 
     

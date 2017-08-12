@@ -12,10 +12,11 @@ import segment as sgm
 import dataset as ds
 
 
-def collectData(filename):
+def collectData(foldername, filename):
     """Collect freehand drawn path information from the file.
 
     Args:
+        foldername (str): The name of the folder containing training files.
         filename (str): The name of a SVG file containing training data. The file should only contain
                         one type of nodes.
 
@@ -24,7 +25,7 @@ def collectData(filename):
 
     """
     data = []
-    tree = sp.loadFile(filename)
+    tree = sp.loadFile(foldername, filename)
     pathlist = sp.loadPaths(tree)
     shapelist = sgm.segmentPath(pathlist, train=True)[0]  # Skip segmentation when training
     for shape in shapelist:
@@ -72,7 +73,7 @@ def generateData(nodetype, num):
     return data, y
 
 
-def trainSVM(filenames, labels, dotnum, morphismnum):
+def trainSVM(foldername, filenames, labels, dotnum, morphismnum):
     """Use both existing data and generated data to train the SVM classifier.
 
     Args:
@@ -89,7 +90,7 @@ def trainSVM(filenames, labels, dotnum, morphismnum):
         print('wrong input')
     else:
         for filename, label in zip(filenames, labels):
-            newdata = collectData(filename)
+            newdata = collectData(foldername, filename)
             newy = [label] * len(newdata)
             data.extend(newdata)
             y.extend(newy)
