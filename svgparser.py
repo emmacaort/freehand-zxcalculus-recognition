@@ -7,7 +7,7 @@ Created on Sat Jun 03 20:00:00 2017
 import numpy as np
 import xml.etree.ElementTree as ET
 import element as elm
-
+from config import *
 
 
 def loadFile(foldername,filename):  
@@ -136,7 +136,7 @@ def addPoint(tree,point,pointtype='c'):
         point.attrib['r'] = '0.5'
         point.tail = '\n'
 
-def addDot(tree,dot,colour='red',radius=10.0):
+def addDot(tree,dot, fill_c=dot_fill_colour, contour=dot_contour_bool, radius=dot_radius):
     """Draw a dot on the XML tree.
     
     Args:
@@ -151,16 +151,26 @@ def addDot(tree,dot,colour='red',radius=10.0):
     root = tree.getroot()
     for pointaddr in root.iter('{http://www.w3.org/2000/svg}g'):
         point = ET.SubElement(pointaddr,'{http://www.w3.org/2000/svg}circle')
-        if colour == 'red':
-            point.attrib['style'] = 'fill: #FF0000'  # Red
+        print 'fill:',fill_c
+        if fill_c == 'red':
+            point.attrib['style'] = 'fill:#FF0000'
+        elif fill_c == 'green':
+            point.attrib['style'] = 'fill:##00ff00'
+        elif fill_c == 'grey':
+            point.attrib['style'] = 'fill:#AAAAAA'
         else:
-            point.attrib['style'] = 'fill: ##00ff00'  # Green
+            point.attrib['style'] = 'fill:none'
+        if contour == True:
+            point.attrib['style'] += ';stroke:#000000'
+        else:  # Has no contour
+            pass
+        point.attrib['style'] += ';stroke-width:0.26458332px'
         point.attrib['cx'] = x_str
         point.attrib['cy'] = y_str
         point.attrib['r'] = r_str
         point.tail = '\n'
 
-def addMorphism(tree,morphism,a=30,b=40,h=20):
+def addMorphism(tree,morphism,a=morphism_a,b=morphism_b,h=morphism_h):
     """Draw a morphism box on the XML tree.
     
     Use M, h, v and z command to draw a morphism. M = moveto(M X,Y), h = horizontal lineto(h X), v = vertical lineto(v Y),
@@ -197,7 +207,7 @@ def addMorphism(tree,morphism,a=30,b=40,h=20):
         stroke.tail = '\n' 
 
         
-def addWire(tree,wire,dot_r=10,mor_h=20):
+def addWire(tree,wire,dot_r=dot_radius,mor_h=morphism_h):
     """Draw a wire on the XML tree.
     
     First check whether the wire is connected to any dots or morphisms. If yes, change the end point positions and make it 

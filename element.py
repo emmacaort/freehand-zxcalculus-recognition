@@ -9,6 +9,7 @@ import math
 import numpy as np
 from shapely import geometry as geo
 import svgparser as sp
+from config import *
 
 
 class curve:
@@ -212,7 +213,6 @@ class shape:
         rectang = self.rectangularity()
         circular = self.circularity()
         aspect = self.aspectRatio()
-        #self.attributes = [eccent,circular]
         self.attributes = [eccent,circular,aspect]
 
     def eccentricity(self):
@@ -258,9 +258,13 @@ class shape:
         r = max(ecldndist)
         circlearea = math.pi * r ** 2
         return self.area / circlearea
+        
     def aspectRatio(self):
+        """Calculate the aspect ratio of the shape.
+        """
         return (self.xbound[1] - self.xbound[0])/(self.ybound[1] - self.ybound[0])
-    def openCheck(self, threshold=0.10):
+        
+    def openCheck(self, threshold=oc_threshold):
         """Check whether the polygon is a closed shape.
 
         Calculate the distance between the two ends of the polygon. If the ratio between the distance and the polygon
@@ -279,7 +283,7 @@ class shape:
         else:
             return False
 
-    def convexCheck(self, threshold=1.30):
+    def convexCheck(self, threshold=cc_threshold):
         """Check whether the polygon is a convex shape.
 
         Calculate the area of the convex hull of the polygon. If the ratio between the convex hull area and the polygon
@@ -310,16 +314,16 @@ class shape:
             An int range from 0 to 7.
         """
         distances = [sp.dist(self.centroid, boundpoint) for boundpoint in self.boundpoints]
-        cornerpoint = self.boundpoints[np.argmax(distances)]
-        [dx, dy] = np.array(self.centroid) - np.array(cornerpoint)
+        self.cornerpoint = self.boundpoints[np.argmax(distances)]
+        [dx, dy] = np.array(self.centroid) - np.array(self.cornerpoint)
         if dx < 0 and dy < 0:
             return 'origin'
         elif dx >= 0 and dy < 0:
-            return 'hflip'
+            return 'vflip'
         elif dx > 0 and dy > 0:
             return 'hvflip'
         else:
-            return 'vflip'
+            return 'hflip'
 
 
 class dot():
@@ -476,7 +480,7 @@ class wire():
         """
         return np.array(centre) - np.array(end)
 
-    def connect(self, nodelist, threshold=15.0):
+    def connect(self, nodelist, threshold=connect_min_d):
         """ Connect the wire with nodes.
 
         For each end of the wire, check the distance between the end position and every node's vertex position.
@@ -508,7 +512,7 @@ class wire():
             except:
                 pass
 
-    def refinePoints(self, pnumber=3):
+    def refinePoints(self, pnumber=refined_points_n):
         """Reduce the number of points in the pointlist.
 
         This function is used for drawing the outputs. It enables the SVG to draw smooth or straight wires.

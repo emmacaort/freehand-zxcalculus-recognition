@@ -6,6 +6,7 @@ Created on Tue Jul  4 12:27:23 2017
 """
 
 import svgparser as sp
+from config import *
 
 
 def connectWire(wirelist,nodelist):
@@ -19,7 +20,6 @@ def connectWire(wirelist,nodelist):
     for wire in wirelist:
         for [connectnode,angle,i,_] in wire.connect(nodelist):
             connectnode.addConnection([wire, angle, i])
-            
 
 
 def giveScore(nodelist,wirelist,intersect):
@@ -35,32 +35,28 @@ def giveScore(nodelist,wirelist,intersect):
     Returns:
         The score.
     """
-    score = 1.0
+    score = default_score
     # 1 or 2 intersections might not mean correction. But over 3 intersections are very likley to mean correction.
     # If the new path considered a correction, all the correction hypotheses will get higher scores than normal ones.
-    if intersect == 1 or intersect == 2:
-        score *= 1.05
+    if intersect == 1:        
+        score *= beta_1
+    elif intersect == 2:
+        score *= beta_2
     elif intersect == 3:
-        score *= 1.2
+        score *= beta_3
     elif intersect >= 4:
-        score *= 1.5
+        score *= beta_4
     else:
         pass
     # If there is a node or a wire connecting to nothing, the hypothesis will have a lower score.
-    for node in nodelist:
-        if len(node.connections)==0:
-            score *= 0.8
-        elif len(node.connections)==1:
-            score *= 1.05
+    elementlist = nodelist + wirelist
+    for element in elementlist:
+        if len(element.connections)==0:
+            score *= alpha_1
+        elif len(element.connections)==1:
+            score *= alpha_2
         else:
-            score *= 1.2
-    for wire in wirelist:
-        if len(wire.connections)==0:
-            score *= 0.8
-        elif len(wire.connections)==1:
-            score *= 1.05
-        else:
-            score *= 1.2
+            score *= alpha_3
     return score
 
 

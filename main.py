@@ -10,25 +10,22 @@ import classify as clf
 import svgparser as sp
 import connect as cn
 import tikzdraw as td
+from config import *
 
 
 def main():
     print 'Training the node classifier...'
-    train_folder = 'training_set'
-    train_files = ['circle0.svg','circle1.svg','circle2.svg','circle3.svg','morphism0.svg','morphism1.svg','morphism2.svg']
-    train_labels = [1,1,1,1,-1,-1,-1]
-    nodeclf = clf.trainSVM(train_folder,train_files,train_labels,1,1)
-    
-    test_folder = 'test_set'
-    test_file = 'zx1.svg'
+    nodeclf = clf.trainSVM(train_folder,train_files,train_labels,training_dot_n,training_mor_n)
+
+    # Load the test file
     svg = sp.loadFile(test_folder,test_file)
     pathlist = sp.loadPaths(svg)
     
-    print 'Generating hypotheses...'
+    # Generate hypotheses
     hypotheses = sgm.segmentPath(pathlist,train=False)
     [corr_pathlist,intersect] = sgm.correctPathlist(pathlist)
     
-    print 'Classifying diagram elements in each hypothesis...'
+    # Classifying diagram elements in each hypothesis
     normal = clf.predict(hypotheses,nodeclf)
     if corr_pathlist!=None:
         correction = clf.predict(corr_pathlist,nodeclf)
@@ -43,15 +40,17 @@ def main():
     print('wire:',len(wirelist))
     print('dot:',len(dotlist))
     print('morphism:',len(morphismlist))
-    tree = sp.loadFile(test_folder,'blank.svg')
+    print '================'
+    
+    tree = sp.loadFile(test_folder,background)
     print 'Drawing Outputs...'
     cn.drawOutput(tree,wirelist,dotlist,morphismlist)
-    sp.writeFile(tree,'c1.svg')
+    sp.writeFile(tree,output)
     try:
         print 'LaTex Code:'
         latex_command = td.create_diagram(dotlist,morphismlist,wirelist)
         print latex_command
     except:
         pass
-    
+
 main()
