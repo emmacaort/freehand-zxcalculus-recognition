@@ -50,7 +50,7 @@ def main():
     # Draw outputs    
     tree = sp.loadFile(test_folder,background)
     cn.drawOutput(tree,wirelist,dotlist,morphismlist)
-    sp.writeFile(tree,output)
+    sp.writeFile(output_folder,tree,output)
     try:
         print 'LaTex Code:'
         latex_command = td.create_diagram(dotlist,morphismlist,wirelist)

@@ -152,7 +152,6 @@ def addDot(tree,dot, fill_c=dot_fill_colour, contour=dot_contour_bool, radius=do
     root = tree.getroot()
     for pointaddr in root.iter('{http://www.w3.org/2000/svg}g'):
         point = ET.SubElement(pointaddr,'{http://www.w3.org/2000/svg}circle')
-        print 'fill:',fill_c
         if fill_c == 'red':
             point.attrib['style'] = 'fill:#FF0000'
         elif fill_c == 'green':
@@ -194,13 +193,13 @@ def addMorphism(tree,morphism,a=morphism_a,b=morphism_b,h=morphism_h):
         if orient == "origin":
             corner_str = str(centre[0]+a/2) + ',' + str(centre[1]-h/2)
             stroke.attrib['d'] =  'M ' + corner_str + ' h -' + str(a) + ' v ' + str(h) + ' h ' + str(b) + ' z' 
-        elif orient == "hflip":
+        elif orient == "vflip":
             corner_str = str(centre[0]-a/2) + ',' + str(centre[1]-h/2)
             stroke.attrib['d'] =  'M ' + corner_str + ' h ' + str(a) + ' v ' + str(h) + ' h -' + str(b) + ' z'  
         elif orient == "hvflip":
             corner_str = str(centre[0]-a/2) + ',' + str(centre[1]+h/2)
             stroke.attrib['d'] =  'M ' + corner_str + ' h ' + str(a) + ' v -' + str(h) + ' h -' + str(b) + ' z'   
-        elif orient == "vflip":
+        elif orient == "hflip":
             corner_str = str(centre[0]+a/2) + ',' + str(centre[1]+h/2)
             stroke.attrib['d'] =  'M ' + corner_str + ' h -' + str(a) + ' v -' + str(h) + ' h ' + str(b) + ' z'         
         stroke.attrib['id'] = 'path'+str('1')
@@ -274,7 +273,7 @@ def transtoInkscapePath(pointlist):
     return pointlist    
     
     
-def writeFile(tree,newname):
+def writeFile(folder,tree,newname):
     """Write the XML tree to an SVG file.
     
     Args:
@@ -283,6 +282,7 @@ def writeFile(tree,newname):
     """
     root = tree.getroot()
     root.attrib['{http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd}docname'] = newname
-    tree.write(newname, xml_declaration=True, default_namespace='')
+    address = folder + '/' + newname
+    tree.write(address, xml_declaration=True, default_namespace='')
 
 

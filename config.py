@@ -96,6 +96,9 @@ test_file = 'zx3.svg'
 # Provide a blank background for drawing recognised diagram on it.
 background = 'blank.svg'
 
+# The folder containing outputs.
+output_folder = 'outputs'
+
 # The name of the output file.
 output = 'output.svg'
 
