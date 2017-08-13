@@ -1,4 +1,9 @@
 # coding: utf-8
+"""
+Updated 13 Aug 2017
+
+@author: Ruiting
+"""
 #---------------------------------------------------------------------
 '''
 Configuration file for setting the parameters of the recognition program
@@ -8,6 +13,10 @@ Configuration file for setting the parameters of the recognition program
 # Element parameters 
 # If using an Inkscape SVG input with A4 size, do not modify
 #---------------------------------------------------------------------
+# Labels of the dot and the morphism
+dot_label = 1
+mor_label = -1
+
 # The threshold value of opencheck ratio for a shape element. 
 oc_threshold = 0.10
 
@@ -45,11 +54,35 @@ train_folder = 'training_set'
 train_files = ['circle0.svg','circle1.svg','circle2.svg','circle3.svg','morphism0.svg','morphism1.svg','morphism2.svg']
 
 # The labels of training data in the trianing files.
-train_labels = [1,1,1,1,-1,-1,-1]
+train_labels = [dot_label]*4 + [mor_label]*3
 
 # The number of training dots and traning morphisms
-training_dot_n = 1 
-training_mor_n = 1 
+training_dot_n = 800
+training_mor_n = 800 
+
+# The name of the dumped classifer 
+clf_name = 'svm_clf.pkl'
+
+#---------------------------------------------------------------------
+# Dataset generation parameters
+#---------------------------------------------------------------------
+# The number of points on a generated shape.
+point_n_range = [80,120]
+
+# The centre of the generated shape.
+shape_centre=[200,200]
+
+# The radius of the generated dots.
+dot_r_range=[60,80]
+
+# The edge length of the generated morphisms.
+mor_a_range = [40,70]
+mor_b_range = [50,90]
+mor_h_range = [30,80]
+
+# The deformation ratio for the generated shapes.
+dot_deform = 0.03
+mor_deform = 0.025
 
 #---------------------------------------------------------------------
 # Testing parameters
@@ -65,6 +98,10 @@ background = 'blank.svg'
 
 # The name of the output file.
 output = 'output.svg'
+
+# The files for evaluation.
+evaluate_dots = ['circle4.svg','circle5.svg']
+evaluate_morphisms = ['morphism3.svg','morphism4.svg']
 
 #---------------------------------------------------------------------
 # SVG visualisation parameters

@@ -1,14 +1,15 @@
 # -*- coding: utf-8 -*-
 """
-Created on Fri Jul  7 12:05:30 2017
+Updated 13 Aug 2017
 
-@author: 瑞婷
+@author: Ruiting
 """
 
 import random
 import math
 import element as elm
 import svgparser as sp
+from config import *
 
 
 def randommove(point,r,ratio):
@@ -110,7 +111,7 @@ def circlepointlist(pointnum,c,r,deformratio):
     return pointlist
 
 
-def generateDotPath(pointnrange=[80,120],c=[200,200],rrange=[60,80],deformratio=0.03):
+def generateDotPath(pointnrange=point_n_range,c=shape_centre,rrange=dot_r_range,deformratio=dot_deform):
     """Generate a path object which has a freehand dot shape.
 
     The generated path has a random point dense and a random circle size.
@@ -197,7 +198,8 @@ def trapezoidpointlist(pointnum,c,a,b,h,deformratio):
     return pointlist
 
 
-def generateMorphismPath(pointnrange=[80,120],c=[200,200],arange=[40,70],brange=[50,90],hrange=[30,80],deformratio=0.025):
+def generateMorphismPath(pointnrange=point_n_range,c=shape_centre,arange=mor_a_range,
+                         brange=mor_b_range,hrange=mor_h_range,deformratio=mor_deform):
     """Generate a path object which has a freehand morphism shape.
 
     The generated path has a random point dense and a random trapezoid size.

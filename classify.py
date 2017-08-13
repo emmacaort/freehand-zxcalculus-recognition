@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 """
-Created on Thu Oct 13 22:21:32 2016
+Updated 13 Aug 2017
 
-@author: Administrator
+@author: Ruiting
 """
 
 from sklearn import svm, linear_model
@@ -10,6 +10,7 @@ import svgparser as sp
 import element as elm
 import segment as sgm
 import dataset as ds
+from config import *
 
 
 def collectData(foldername, filename):
@@ -58,7 +59,7 @@ def generateData(nodetype, num):
         for shape in shapelist:
             shape.getAttributes()
             data.append(shape.attributes)
-        newy = [1] * len(data)  # 0 corresponds to dot nodes.
+        newy = [dot_label] * len(data)  
         y.extend(newy)
     elif nodetype == 'morphism':
         morphismpathlist = [ds.generateMorphismPath() for _ in xrange(num)]
@@ -66,7 +67,7 @@ def generateData(nodetype, num):
         for shape in shapelist:
             shape.getAttributes()
             data.append(shape.attributes)
-        newy = [-1] * len(data)  # 1 corresponds to morphism nodes.
+        newy = [mor_label] * len(data)  
         y.extend(newy)
     else:
         pass

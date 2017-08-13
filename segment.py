@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 """
-Created on Wed Jun 28 19:55:25 2017
+Updated 13 Aug 2017
 
-@author: Administrator
+@author: Ruiting
 """
 
 import itertools
@@ -11,7 +11,6 @@ import svgparser as sp
 import element as elm
 
 
-    
 def matchPaths(path1,path2,threshold=10.0):
     """Get the match type of two paths.
 

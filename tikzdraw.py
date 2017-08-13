@@ -8,6 +8,8 @@ Created on Wed Aug 02 16:25:49 2017
 import numpy as np
 import itertools
 import svgparser as sp
+from config import *
+
 
 def xshift_list(wires_n,edge_len):
     """Create positions for the wire ends on a morphism edge.
@@ -30,7 +32,7 @@ def xshift_list(wires_n,edge_len):
         shift_list[i] = shift_list[i-1] + interval
     return shift_list
 
-def organize_wires(morphismlist,wirelist,edge_len=5.0):
+def organize_wires(morphismlist,wirelist,edge_len=mor_edge_len):
     """Move the wire ends according to the xshift values.
     
     Args:
@@ -79,7 +81,7 @@ def get_ref_centre(nodelist):
     unit_d = max(min_x, min_y)
     return [min_p0,unit_d]
 
-def get_relative_pos(abs_pos,ref_centre,unit_d,unit=1.0): 
+def get_relative_pos(abs_pos,ref_centre,unit_d,unit=nodegrid_unit): 
     """Calculate the relative position according to a reference position.
 
     Args: 
@@ -95,7 +97,7 @@ def get_relative_pos(abs_pos,ref_centre,unit_d,unit=1.0):
     rel_y = -round((abs_pos[1] - ref_centre[1])/unit_d)*unit  # Different coordinate system
     return [rel_x,rel_y]
 
-def transform_angle(sub,round_value=30.0):
+def transform_angle(sub,round_value=angle_round):
     """Round the angle.
     
     Transform the direction vector to an angle value between 0 to 360. Round the angle with the 
@@ -328,10 +330,10 @@ def create_diagram(dotlist,morphismlist,wirelist):
         # If the length of the wire exceeds the threshold, find inter points and draw a long wire
         wire_len = wire.getLength()
         len_times = wire_len/unit_d
-        if wire_len > unit_d * 1.5:
+        if wire_len > unit_d * longwire_threshold:
             point_n = int(round(len_times))
-            if point_n > 4:
-                point_n = 4  #  Don't want too many inter points even if the wire is very long
+            if point_n > max_interpoint_n:
+                point_n = max_interpoint_n  #  Don't want too many inter points even if the wire is very long
             interpoints = wire.refinePoints(point_n)[1:-1]  # Get the absolute inter points' positions. 
                                                             # Remove the start point and the end point
             interpoints_str = ""
@@ -340,9 +342,9 @@ def create_diagram(dotlist,morphismlist,wirelist):
             relative_points = []
             for i,point in enumerate(interpoints):
                 if i==0:
-                    rel_point = get_relative_pos(point,out_in[0],unit_d/2,0.5)
+                    rel_point = get_relative_pos(point,out_in[0],unit_d/2,wiregrid_unit)
                 else:
-                    rel_point = get_relative_pos(point,interpoints[i-1],unit_d/2,0.5)
+                    rel_point = get_relative_pos(point,interpoints[i-1],unit_d/2,wiregrid_unit)
                 relative_points.append(rel_point)
             # Create the string of the long wire
             previous_in_angle = 0

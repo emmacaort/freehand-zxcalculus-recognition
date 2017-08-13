@@ -1,22 +1,27 @@
 #!/usr/bin/python2
 # -*- coding: utf-8 -*-
 """
-Created on Tue Jul  4 14:37:30 2017
+Updated 13 Aug 2017
 
-@author: 瑞婷
+@author: Ruiting
 """
+
 import segment as sgm
 import classify as clf
 import svgparser as sp
 import connect as cn
 import tikzdraw as td
 from config import *
+from sklearn.externals import joblib
 
 
 def main():
-    print 'Training the node classifier...'
-    nodeclf = clf.trainSVM(train_folder,train_files,train_labels,training_dot_n,training_mor_n)
-
+    """The main recognition program.
+    """
+    
+    # Load the classifier
+    nodeclf = joblib.load(clf_name) 
+    
     # Load the test file
     svg = sp.loadFile(test_folder,test_file)
     pathlist = sp.loadPaths(svg)
@@ -32,18 +37,18 @@ def main():
     else:
         correction = None
         
-    print 'Scoring the hypotheses and finding the winner...'
+    # Score the hypotheses and finding the winner
     [wirelist,dotlist,morphismlist] = cn.findWinner(normal,correction,intersect)
 
-    print '=====WINNER====='
+    print '=====RESULT====='
     print 'Hypotheses number:',len(hypotheses)
     print('wire:',len(wirelist))
     print('dot:',len(dotlist))
     print('morphism:',len(morphismlist))
     print '================'
-    
+
+    # Draw outputs    
     tree = sp.loadFile(test_folder,background)
-    print 'Drawing Outputs...'
     cn.drawOutput(tree,wirelist,dotlist,morphismlist)
     sp.writeFile(tree,output)
     try:

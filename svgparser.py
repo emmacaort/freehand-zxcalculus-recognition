@@ -1,9 +1,10 @@
 # -*- coding: utf-8 -*-
 """
-Created on Sat Jun 03 20:00:00 2017
+Updated 13 Aug 2017
 
-@author: Administrator
+@author: Ruiting
 """
+
 import numpy as np
 import xml.etree.ElementTree as ET
 import element as elm
