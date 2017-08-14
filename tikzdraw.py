@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 """
-Created on Wed Aug 02 16:25:49 2017
+Updated on 13 Aug 2017
 
-@author: Administrator
+@author: Ruiting
 """
 
 import numpy as np
