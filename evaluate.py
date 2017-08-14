@@ -5,6 +5,7 @@ Updated 13 Aug 2017
 @author: Ruiting
 """
 
+from sklearn.externals import joblib
 import segment as sgm
 import classify as clf
 import svgparser as sp
@@ -37,17 +38,27 @@ def evaluate(nodeclf,evaluate_files,label):
         label (int): The label that the tested shapes should belongs to.
     """
     testdata = []
+    correct = 0
+    wire_count = 0
     for filename in evaluate_files:
-        newdata = clf.collectData(test_folder,filename)
-        testdata.extend(newdata)    
-    correct = 0    
+        tree = sp.loadFile(test_folder, filename)
+        pathlist = sp.loadPaths(tree)
+        shapelist = sgm.segmentPath(pathlist, train=True)[0]  # Skip segmentation when training
+        for shape in shapelist:
+            if shape.openCheck() or shape.convexCheck(): # Classified into wire class
+                wire_count += 1
+            else:
+                shape.getAttributes()
+                testdata.append(shape.attributes)         
     for data in testdata:
         pred = nodeclf.predict([data])
         if pred == label:
             correct += 1
-    print "Correct classified: %d, wrongly classified: %d, total: %d" % (correct,len(testdata)-correct,len(testdata))
+
+    print ("Correct classified: %d, wrongly svm classified: %d, classified into wires: %d, total: %d") % (
+            correct,len(testdata)-correct,wire_count,len(testdata)+wire_count)
     
 
-nodeclf = load_clf(True)
+nodeclf = load_clf(False)
 evaluate(nodeclf,evaluate_dots,dot_label)
 evaluate(nodeclf,evaluate_morphisms,mor_label)

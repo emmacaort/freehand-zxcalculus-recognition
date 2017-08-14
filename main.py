@@ -6,13 +6,14 @@ Updated 13 Aug 2017
 @author: Ruiting
 """
 
+from sklearn.externals import joblib
 import segment as sgm
 import classify as clf
 import svgparser as sp
 import connect as cn
 import tikzdraw as td
 from config import *
-from sklearn.externals import joblib
+
 
 
 def main():
