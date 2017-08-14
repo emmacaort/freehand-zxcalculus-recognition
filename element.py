@@ -287,7 +287,7 @@ class shape:
         """Check whether the polygon is a convex shape.
 
         Calculate the area of the convex hull of the polygon. If the ratio between the convex hull area and the polygon
-        area is over some threshold, the polygon is considered a concave shape.
+        area is smaller than the threshold, the polygon is considered a concave shape.
 
         Args:
             threshold (float): The threshold number of the ratio.
@@ -297,8 +297,8 @@ class shape:
         """
         convexhull = self.poly.convex_hull
         ch_area = convexhull.area
-        ratio = ch_area / self.area
-        if ratio > threshold:
+        ratio = self.area / ch_area
+        if ratio < threshold:
             return True
         else:
             return False
