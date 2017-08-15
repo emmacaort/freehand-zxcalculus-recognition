@@ -19,7 +19,7 @@ Modify the test_file in config.py if you want to recognise your own SVG file.
 ```
 test_file = 'your_input.svg'
 ```
-## Visualise outputs
+## Visualise the outputs
 - Check the "output.svg" in outputs folder for the SVG visualisation output. 
 - The LaTeX code ouput is printed by the main program. Copy the code into the "tikz-examples.tex" in latex_diagram folder and compile. 
 
