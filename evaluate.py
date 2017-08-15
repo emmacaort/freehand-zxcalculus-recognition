@@ -59,6 +59,6 @@ def evaluate(nodeclf,evaluate_files,label):
             correct,len(testdata)-correct,wire_count,len(testdata)+wire_count)
     
 
-nodeclf = load_clf(False)
+nodeclf = load_clf(True)
 evaluate(nodeclf,evaluate_dots,dot_label)
 evaluate(nodeclf,evaluate_morphisms,mor_label)
