@@ -6,7 +6,7 @@ Updated 13 Aug 2017
 @author: Ruiting
 """
 
-from sklearn.externals import joblib
+import cPickle
 import segment as sgm
 import classify as clf
 import svgparser as sp
@@ -21,7 +21,8 @@ def main():
     """
     
     # Load the classifier
-    nodeclf = joblib.load(clf_name) 
+    with open(clf_name, "rb") as f:
+        nodeclf = cPickle.load(f) 
     
     # Load the test file
     svg = sp.loadFile(test_folder,test_file)

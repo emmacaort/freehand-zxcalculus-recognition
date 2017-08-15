@@ -5,7 +5,7 @@ Updated 13 Aug 2017
 @author: Ruiting
 """
 
-from sklearn.externals import joblib
+import cPickle
 import segment as sgm
 import classify as clf
 import svgparser as sp
@@ -24,9 +24,11 @@ def load_clf(retrain_bool):
     """
     if retrain_bool:
         nodeclf = clf.trainSVM(train_folder,train_files,train_labels,training_dot_n,training_mor_n)
-        joblib.dump(nodeclf,clf_name)  # Dump the classifier to local        
+        with open(clf_name, "wb") as f:
+            cPickle.dump(nodeclf,f)  # Dump the classifier to local        
     else:
-        nodeclf = joblib.load(clf_name) 
+        with open(clf_name, "rb") as f:
+            nodeclf = cPickle.load(f) 
     return nodeclf
 
 def evaluate(nodeclf,evaluate_files,label):
@@ -59,6 +61,6 @@ def evaluate(nodeclf,evaluate_files,label):
             correct,len(testdata)-correct,wire_count,len(testdata)+wire_count)
     
 
-nodeclf = load_clf(True)
+nodeclf = load_clf(True)  # Set the args False if testing with existing clf
 evaluate(nodeclf,evaluate_dots,dot_label)
 evaluate(nodeclf,evaluate_morphisms,mor_label)
