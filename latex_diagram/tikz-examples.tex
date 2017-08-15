@@ -1,0 +1,31 @@
+\documentclass{article}
+\include{header}
+\begin{document}
+
+\[\begin{tikzpicture} 
+  \node[dot] (0) at (0.00,-0.00) {}; 
+  \node[morphism,vflip] (1) at (0.00,1.00) {$f1$}; 
+  \draw[out=270,in=90] (1.south) to (0.center); 
+  \draw (1.north) to [out=90, in=180] +(1.00,0.50) to [out=0, in=90] +(0.50,-1.50) to [out=270, in=90] +(-0.00,-0.50) to [out=270, in=270](0.center); 
+\end{tikzpicture}\] 
+
+\[\begin{tikzpicture} 
+  \node[dot] (0) at (0.00,-0.00) {}; 
+  \node[dot] (1) at (-0.00,-1.00) {}; 
+  \node[morphism] (2) at (1.00,-1.00) {$f2$}; 
+  \node[morphism] (3) at (-0.00,1.00) {$f3$}; 
+  \draw[out=270,in=90] (3.south) to (0.center); 
+  \draw[out=270,in=90] (0.center) to (1.center); 
+  \draw (1.center) to [out=0, in=180] +(1.00,-0.50) to [out=0, in=270](2.south); 
+  \draw (1.center) to [out=60, in=180] +(0.50,0.50) to [out=0, in=90](2.north); 
+  \draw (3.north) to [out=90, in=180] +(1.00,0.50) to [out=0, in=90] +(0.50,-1.00) to [out=270, in=90] +(-0.00,-1.00) to [out=270, in=330](0.center); 
+\end{tikzpicture}\] 
+
+\[\begin{tikzpicture} 
+  \node[dot] (0) at (0.00,-0.00) {}; 
+  \node[morphism,hflip] (1) at (-0.00,-1.00) {$f1$}; 
+  \draw[out=90,in=90] (0.center) to +(0.00,1.00); 
+  \draw[out=330,in=90] (0.center) to ([xshift=-1.250mm]1.north); 
+  \draw[out=240,in=90] (0.center) to ([xshift=1.250mm]1.north); 
+\end{tikzpicture}\] 
+\end{document}

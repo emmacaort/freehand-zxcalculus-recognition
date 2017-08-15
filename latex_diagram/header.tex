@@ -1,0 +1,162 @@
+\usepackage{tikz}
+
+\pgfdeclarelayer{foreground}
+\pgfdeclarelayer{background}
+\pgfdeclarelayer{morphismlayer}
+\pgfdeclarelayer{edgelayer}
+\pgfdeclarelayer{nodelayer}
+\pgfsetlayers{background,main,morphismlayer,foreground,edgelayer,nodelayer}
+\makeatletter
+\pgfkeys{%
+  /tikz/on layer/.code={
+    \pgfonlayer{#1}\begingroup
+    \aftergroup\endpgfonlayer
+    \aftergroup\endgroup
+  },
+  /tikz/node on layer/.code={
+    \gdef\node@@on@layer{%
+      \setbox\tikz@tempbox=\hbox\bgroup\pgfonlayer{#1}\unhbox\tikz@tempbox\endpgfonlayer\egroup}
+    \aftergroup\node@on@layer
+  },
+  /tikz/end node on layer/.code={
+    \endpgfonlayer\endgroup\endgroup
+  }
+}
+\def\node@on@layer{\aftergroup\node@@on@layer}
+\makeatother
+
+\newif\ifvflip\pgfkeys{/tikz/vflip/.is if=vflip}
+\newif\ifhflip\pgfkeys{/tikz/hflip/.is if=hflip}
+\newif\ifhvflip\pgfkeys{/tikz/hvflip/.is if=hvflip}
+\newlength\morphismheight
+\setlength\morphismheight{4mm}
+\newlength\wedgewidth
+\setlength\wedgewidth{8pt}
+\tikzset{width/.initial=1mm}
+\makeatletter
+\tikzstyle{morphism}=[font=\small,morphismshape]
+\pgfdeclareshape{morphismshape}
+{
+    \savedanchor\centerpoint
+    {
+        \pgf@x=0pt
+        \pgf@y=0pt
+    }
+    \anchor{center}{\centerpoint}
+    \anchorborder{\centerpoint}
+    \saveddimen\overallwidth
+    {
+        \pgfkeysgetvalue{/tikz/width}{\minwidth}
+        \pgf@x=\wd\pgfnodeparttextbox
+        \ifdim\pgf@x<\minwidth
+            \pgf@x=\minwidth
+        \fi
+    }
+    \savedanchor{\upperrightcorner}
+    {
+        \pgf@y=.5\ht\pgfnodeparttextbox
+        \advance\pgf@y by -.5\dp\pgfnodeparttextbox
+        \pgf@x=.5\wd\pgfnodeparttextbox
+    }
+    \anchor{north}
+    {
+        \pgf@x=0pt
+        \pgf@y=0.5\morphismheight
+    }
+    \anchor{north east}
+    {
+        \pgf@x=\overallwidth
+        \multiply \pgf@x by 2
+        \divide \pgf@x by 5
+        \pgf@y=0.5\morphismheight
+    }
+    \anchor{east}
+    {
+        \pgf@x=\overallwidth
+        \divide \pgf@x by 2
+        \advance \pgf@x by 5pt
+        \pgf@y=0pt
+    }
+    \anchor{west}
+    {
+        \pgf@x=-\overallwidth
+        \divide \pgf@x by 2
+        \advance \pgf@x by -5pt
+        \pgf@y=0pt
+    }
+    \anchor{north west}
+    {
+        \pgf@x=-\overallwidth
+        \multiply \pgf@x by 2
+        \divide \pgf@x by 5
+        \pgf@y=0.5\morphismheight
+    }
+    \anchor{south east}
+    {
+        \pgf@x=\overallwidth
+        \multiply \pgf@x by 2
+        \divide \pgf@x by 5
+        \pgf@y=-0.5\morphismheight
+    }
+    \anchor{south west}
+    {
+        \pgf@x=-\overallwidth
+        \multiply \pgf@x by 2
+        \divide \pgf@x by 5
+        \pgf@y=-0.5\morphismheight
+    }
+    \anchor{south}
+    {
+        \pgf@x=0pt
+        \pgf@y=-0.5\morphismheight
+    }
+    \anchor{text}
+    {
+        \upperrightcorner
+        \pgf@x=-\pgf@x
+        \pgf@y=-\pgf@y
+    }
+    \backgroundpath
+    {
+    \begin{scope}
+        \pgfkeysgetvalue{/tikz/fill}{\morphismfill}
+        \pgfsetstrokecolor{black}
+        \pgfsetlinewidth{.7pt}
+        \begin{scope}
+        \pgfsetstrokecolor{black}
+        \pgfsetfillcolor{white}
+        \pgfsetlinewidth{.7pt}
+                \ifhflip
+                    \pgftransformyscale{-1}
+                \fi
+                \ifvflip
+                    \pgftransformxscale{-1}
+                \fi
+                \ifhvflip
+                    \pgftransformxscale{-1}
+                    \pgftransformyscale{-1}
+                \fi
+                \pgfpathmoveto{\pgfpoint
+                    {-0.5*\overallwidth-5pt}
+                    {0.5*\morphismheight}}
+                \pgfpathlineto{\pgfpoint
+                    {0.5*\overallwidth+5pt}
+                    {0.5*\morphismheight}}
+                \pgfpathlineto{\pgfpoint
+                    {0.5*\overallwidth + \wedgewidth}
+                    {-0.5*\morphismheight}}
+                \pgfpathlineto{\pgfpoint
+                    {-0.5*\overallwidth-5pt}
+                    {-0.5*\morphismheight}}
+                \pgfpathclose
+                \pgfusepath{fill,stroke}
+        \end{scope}
+    \end{scope}
+    }
+}
+
+\tikzset{morphism/.style={morphismshape, node on layer=foreground}}
+
+\tikzstyle{dot}=[circle, draw=black, fill=black!25, inner sep=.4ex, node on layer=foreground]
+\tikzstyle{whitedot}=[circle, draw=black, fill=white, inner sep=.4ex, node on layer=foreground]
+
