@@ -20,8 +20,8 @@ mor_label = -1
 # The threshold value of opencheck ratio for a shape element. 
 oc_threshold = 0.10
 
-# The thresholdvalue of convexcheck ratio for a shape element.
-cc_threshold = 1.30
+# The threshold value of convexcheck ratio for a shape element.
+cc_threshold = 0.70
 
 # The minimum connect distance for wire elements.
 connect_min_d = 15.0
@@ -91,7 +91,7 @@ mor_deform = 0.025
 test_folder = 'test_set'
 
 # The file to test.
-test_file = 'zx3.svg'
+test_file = '006.svg'
 
 # Provide a blank background for drawing recognised diagram on it.
 background = 'blank.svg'
