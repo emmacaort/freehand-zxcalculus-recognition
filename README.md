@@ -27,7 +27,8 @@ test_file = 'your_input.svg'
 Run the evaluate.py and it will print out the accuracy of the classifier. 
 
 ## Tips for users
-- When drawing your own diagrams in Inkscape, use the freehand stroke tool with the default smoothness and do NOT use snapping. Snapping can be set at document properties.
+- When drawing your own diagrams in Inkscape, use the freehand stroke tool with the smoothness of 20 (on the top-left corner) and do NOT use snapping. Snapping can be set at document properties.
+- If you can not load the svm_clf.pkl classifier, run the evaluate.py first. It'll train a new classifier and cover the original one. 
 - To be continued (•ิ_•ิ)
 
 
