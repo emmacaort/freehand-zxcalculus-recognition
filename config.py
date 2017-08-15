@@ -91,7 +91,7 @@ mor_deform = 0.025
 test_folder = 'test_set'
 
 # The file to test.
-test_file = '006.svg'
+test_file = 'zx1.svg'
 
 # Provide a blank background for drawing recognised diagram on it.
 background = 'blank.svg'
