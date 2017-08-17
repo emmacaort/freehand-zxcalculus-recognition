@@ -18,6 +18,9 @@ from config import *
 
 def main():
     """The main recognition program.
+    
+    Run the elvaluate.py first to recreate a .pkl file if cannot load classier. 
+    
     """
     
     # Load the classifier
